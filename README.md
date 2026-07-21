@@ -13,4 +13,4 @@ A simple Pomodoro timer written in Rust using Ratatui.
 - Notifications
 
 ## sc 
-![Pomotui](assets/example.png)
+![Pomotui](example.png)
