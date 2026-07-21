@@ -1,10 +1,16 @@
-#Pomotui 
+# Pomotui
 
-This is a simple pomodoro written in rust with Ratatui
+A simple Pomodoro timer written in Rust using Ratatui.
 
-## Features 
-- Cand pause and resume wowwwwwwwwwww
-- to implement 
-    - reset 
-    - navegable buttons 
-    - alarms 
+## Features
+
+- Pause and resume the timer wowwwwww
+
+## Planned Features
+
+- Reset timer.
+- Navigable buttons.
+- Notifications
+
+## sc 
+![Pomotui](assets/example.png)
