@@ -1,7 +1,7 @@
 use std::time::{Duration, Instant};
 
 use ratatui::{
-    crossterm::event::{self, Event, KeyCode},
+    crossterm::event::{self, Event, KeyCode,KeyEventKind},
     layout::{Alignment, Layout, Constraint, Direction},
     style::{Style, Color, Modifier},
     widgets::{Paragraph, Block, Borders},
@@ -29,7 +29,7 @@ fn main()-> std::io::Result<()>{
             let texto = format!("{:02}:{:02}",restante / 60, restante % 60  );
             let widget = Paragraph::new(texto)
                 .alignment(Alignment::Center)
-                .block(Block::default().borders(Borders::ALL).title(" Pomodorito [p/ pause] [q/quit]"));
+                .block(Block::default().borders(Borders::ALL).title(" Pomodorito [p/pause] [q/quit]"));
             //let big_text = BigText::builder()
             //    .pixel_size(PixelSize::Full)
             //    .style(Style::default().fg(Color::Cyan))
@@ -45,21 +45,23 @@ fn main()-> std::io::Result<()>{
 
         if event::poll(Duration::from_millis(200))?{
             if let Event::Key(k) = event::read()?{
-                if k.code ==KeyCode::Char('q'){
-                    break;
-                }else if k.code == KeyCode::Char('p'){
-                    if paused{
-                        inicio = Instant::now();
-                        paused = false;
-                    }else {
-                        acumulado += run_timer(inicio);
-                        paused = true;
+                if k.kind == KeyEventKind::Press{
+                    if k.code ==KeyCode::Char('q'){
+                        break;
+                    }else if k.code == KeyCode::Char('p'){
+                        if paused{
+                            inicio = Instant::now();
+                            paused = false;
+                        }else {
+                            acumulado += run_timer(inicio);
+                            paused = true;
+                        }
                     }
                 }
             }
-            }
-            
         }
+            
+    }
         ratatui::restore();
         Ok(())
     }
