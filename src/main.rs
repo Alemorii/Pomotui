@@ -1,18 +1,13 @@
 use std::time::{Duration, Instant};
 
 use ratatui::{
-    crossterm::event::{self, Event, KeyCode,KeyEventKind},
-    layout::{Alignment, Layout, Constraint, Direction},
-    style::{Style, Color, Modifier},
-    widgets::{Paragraph, Block, Borders},
+    crossterm::event::{self, Event, KeyCode,KeyEventKind}, layout::{self, Alignment, Constraint, Direction, Layout}, style::{Color, Modifier, Style}, symbols::block, widgets::{Block, Borders, Paragraph},
 };
-use tui_big_text::{BigText, PixelSize};
 
 
 fn main()-> std::io::Result<()>{
 
     let mut terminal = ratatui::init();
-
 
     let mut inicio = Instant::now();
     let session = 1500;
@@ -27,15 +22,29 @@ fn main()-> std::io::Result<()>{
         terminal.draw(|frame |{
             let restante = session - transcurrido;
             let texto = format!("{:02}:{:02}",restante / 60, restante % 60  );
-            let widget = Paragraph::new(texto)
-                .alignment(Alignment::Center)
-                .block(Block::default().borders(Borders::ALL).title(" Pomodorito [p/pause] [q/quit]"));
-            //let big_text = BigText::builder()
-            //    .pixel_size(PixelSize::Full)
-            //    .style(Style::default().fg(Color::Cyan))
-            //    .lines(vec![texto.into()])
-            //    .build();
-            frame.render_widget(widget, frame.area());
+            
+            let layout = Layout::default()
+                .direction(Direction::Vertical)
+                .constraints([
+                    Constraint::Length(1),// titulo
+                    Constraint::Min(0), // timer 
+                    Constraint::Length(1) // control
+                ])
+                .split(frame.area());
+
+            let titulo = Paragraph::new(" Pomodorito ")
+                    .alignment(Alignment::Center);
+
+            let timer = Paragraph::new(texto)
+                    .alignment(Alignment::Center)
+                    .block(Block::default().borders(Borders::ALL));
+            
+            let ayuda = Paragraph::new(" [p/pause]  [q/quit]")
+                    .alignment(Alignment::Center);
+            
+            frame.render_widget(titulo, layout[0]);
+            frame.render_widget(timer, layout[1]);
+            frame.render_widget(ayuda, layout[2]);
             
         })?;
 
